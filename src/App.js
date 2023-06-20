@@ -3,7 +3,7 @@ import axios from "axios"
 
 function App() {
   useEffect(() => {
-    document.title = 'Weather App'; // Set the new page title here
+    document.title = 'Weather App'; 
   }, []);
 
   const [data, setData] = useState({})
