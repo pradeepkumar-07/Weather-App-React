@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
+import 'moment-timezone';
 
 function App() {
   useEffect(() => {
-    document.title = 'Weather App'; 
+    document.title = 'Weather App';
   }, []);
 
   const [data, setData] = useState({})
-  const [error, setError] = useState('')
   const [location, setLocation] = useState('')
+  const [time, setTime] = useState('')
+
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=761877a71312637eab7250aea36150f7`
 
   const searchLocation = (event) => {
@@ -16,18 +18,30 @@ function App() {
       axios.get(url).then((response) => {
         setData(response.data)
         setLocation('')
+        getTime(response.data.timezone);
+
       })
         .catch(function (error) {
           console.log(error);
           setData("");
           setLocation("");
-          setError({ message: "Not Found", query: location });
-          alert("Invalid Input");
+          alert("Sorry , City not found!!!");
         });
     }
   }
 
+  function getTime(timeZone) {
+    // Import the Moment.js and Moment Timezone libraries
+    const moment = require('moment');
+    require('moment-timezone');
 
+    // Specify the target city's time zone offset in seconds
+    const targetTimeZoneOffset = timeZone; // Example: -18000 for Eastern Standard Time (EST)
+
+    // Get the current time in the target city
+    const targetTime = moment().utcOffset(targetTimeZoneOffset / 60).format('MMM Do hh:mm:ss a');
+    setTime(targetTime);
+  }
 
   return (
     <div className="app">
@@ -41,12 +55,12 @@ function App() {
           type="text"
         />
       </div>
-      {data.name != undefined &&
+      {data.name !== undefined &&
         <div className="container">
           <div className="top">
             <div className="location">
+              <p className="time">{time}</p>
               <p className="city">{data.name} , {data.sys.country}</p>
-
             </div>
             <div className="temp">
               <div>
