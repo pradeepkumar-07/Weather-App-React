@@ -17,17 +17,17 @@ function App() {
         setData(response.data)
         setLocation('')
       })
-      .catch(function (error) {
-        console.log(error);
-        setData("");
-        setLocation("");
-        setError({ message: "Not Found", query: location });
-        alert("Invalid Input");
-      });
+        .catch(function (error) {
+          console.log(error);
+          setData("");
+          setLocation("");
+          setError({ message: "Not Found", query: location });
+          alert("Invalid Input");
+        });
     }
   }
 
-  
+
 
   return (
     <div className="app">
@@ -46,29 +46,31 @@ function App() {
           <div className="top">
             <div className="location">
               <p className="city">{data.name} , {data.sys.country}</p>
-              
+
             </div>
             <div className="temp">
-              {data.main ? <h1>{data.main.temp.toFixed()}°C</h1> : null}
-              {data.weather ? <img className="icon" src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt="" /> : null}
-            </div>
-            <div className="description">
-              {data.weather ? <p>{data.weather[0].main}</p> : null}
+              <div>
+                <h1>{data.main.temp.toFixed()}°C</h1>
+              </div>
+              <div>
+                <img className="icon" src={`https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`} alt="" />
+                <p className="description" >{data.weather[0].main}</p>
+              </div>
             </div>
           </div>
 
           <div className="bottom">
             <div className="feels">
-              {data.main ? <p className="bold">{data.main.feels_like.toFixed()}°C</p> : null}
+              <p className="bold">{data.main.feels_like.toFixed()}°C</p>
               <p>Feels Like</p>
             </div>
             <div className="humidity">
-              {data.main ? <p className="bold">{data.main.humidity}%</p> : null}
+              <p className="bold">{data.main.humidity}%</p>
               <p>Humidity</p>
 
             </div>
             <div className="wind">
-              {data.wind ? <p className="bold">{data.wind.speed}MPH</p> : null}
+              <p className="bold">{data.wind.speed}MPH</p>
               <p>Wind Speed</p>
             </div>
           </div>
