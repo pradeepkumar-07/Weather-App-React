@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import 'moment-timezone';
+import moment from "moment";
 
 function App() {
-  useEffect(() => {
-    document.title = 'Weather App';
-  }, []);
 
   const [data, setData] = useState({})
   const [location, setLocation] = useState('')
@@ -31,17 +29,23 @@ function App() {
   }
 
   function getTime(timeZone) {
-    // Import the Moment.js and Moment Timezone libraries
-    const moment = require('moment');
-    require('moment-timezone');
-
-    // Specify the target city's time zone offset in seconds
-    const targetTimeZoneOffset = timeZone; // Example: -18000 for Eastern Standard Time (EST)
-
-    // Get the current time in the target city
+    const targetTimeZoneOffset = timeZone; 
     const targetTime = moment().utcOffset(targetTimeZoneOffset / 60).format('MMM Do hh:mm:ss a');
     setTime(targetTime);
   }
+
+  useEffect(() => {
+    const timer = setInterval(()=>{
+      setTime(prevTime => {
+        const formattedTime = moment(prevTime, 'MMM Do hh:mm:ss a').add(1, 'seconds').format('MMM Do hh:mm:ss a');
+        return formattedTime;
+      });
+    } , 1000);
+    
+    return () => {
+      clearInterval(timer);
+    };
+  }, [time]);
 
   return (
     <div className="app">
