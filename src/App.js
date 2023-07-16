@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import 'moment-timezone';
 import moment from "moment";
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function App() {
 
@@ -17,13 +20,12 @@ function App() {
         setData(response.data)
         setLocation('')
         getTime(response.data.timezone);
-
+        successNotify();
       })
         .catch(function (error) {
-          console.log(error);
           setData("");
           setLocation("");
-          alert("Sorry , City not found!!!");
+          failedNotify();
         });
     }
   }
@@ -47,6 +49,11 @@ function App() {
     };
   }, [time]);
 
+
+  const failedNotify = () => toast.error("Sorry, No city found!!", { autoClose : 2000});
+  const successNotify = () => toast.success("City found!!", { autoClose : 2000});
+
+
   return (
     <div className="app">
       <div className="search">
@@ -59,6 +66,7 @@ function App() {
           type="text"
         />
       </div>
+      <ToastContainer />
       {data.name !== undefined &&
         <div className="container">
           <div className="top">
